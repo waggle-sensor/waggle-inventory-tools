@@ -10,6 +10,7 @@ parser.add_argument("vsns", nargs="*")
 args = parser.parse_args()
 
 for vsn in args.vsns:
+    vsn = vsn.upper()
     host = f"node-{vsn}"
 
     def check_output(cmd):
@@ -37,7 +38,11 @@ for vsn in args.vsns:
 
     # TODO Decide which items are really core config vs operations.
 
+    # Check VSN config to make sure matches cloud side VSN to node mapping.
+    assert vsn == check_output("cat /etc/waggle/vsn").strip()
+
     # Scrape per node information.
+    # TODO Support optional steps...
     capture("mmcli -m 0", "mmcli-modem.txt")
     capture("mmcli -i 0", "mmcli-sim.txt")
     capture("cat /var/lib/misc/dnsmasq.leases", "dnsmasq-leases.txt")

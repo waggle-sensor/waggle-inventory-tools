@@ -69,3 +69,6 @@ for vsn in args.vsns:
 # Using this data, we can then provide users a simple TODO list of things to do. Examples:
 # * Set zone on device
 # * Set name for cameras (probably something we generate and sync back as dnsmasq config)
+
+# TODO We can also just have the node periodically create a zip archive with all of this info. Then, we can just
+# rsync it back.

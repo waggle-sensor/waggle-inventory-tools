@@ -45,8 +45,6 @@ for vsn in args.vsns:
     # Scrape per device information.
     kube_nodes_data = json.loads(Path("data", vsn, "kube-nodes.json").read_text())
 
-    # consider using shlex join to escape the command
-
     for item in kube_nodes_data["items"]:
         name = item["metadata"]["name"]
         assert name == item["metadata"]["annotations"]["k3s.io/hostname"]

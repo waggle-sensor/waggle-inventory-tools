@@ -50,6 +50,13 @@ for vsn in args.vsns:
         name = item["metadata"]["name"]
         assert name == item["metadata"]["annotations"]["k3s.io/hostname"]
         ip = item["metadata"]["annotations"]["k3s.io/internal-ip"]
+
+        try:
+            subprocess.check_call(["ssh", host, "ssh", ip, "true"])
+        except subprocess.CalledProcessError:
+            print(f"ERROR: Device at {vsn} -> {ip} is unreachable. Skipping.")
+            continue
+
         capture_device(ip, "lsusb", f"devices/{name}/lsusb.txt")
         # TODO handle errors better
         try:

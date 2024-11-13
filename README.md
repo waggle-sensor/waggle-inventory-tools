@@ -22,7 +22,7 @@ This data will allow us to quickly perform queries such as:
 - List all devices with a Hanwha MAC? (`grep -r 01:e4:30 data`)
 - Find all XNV-8081Z cameras without a pinned hostname?
   (`grep -r XNV-8081Z data`)
-- Find all devices which need zone label set? (TODO but can use
-  `kube-nodes.json` file)
+- Find all devices which need zone label set? (See example in
+  [print-todos.py](./print-todos.py))
 - Find all C-Media microphones.
   (`find data -name lsusb.txt | xargs grep C-Media`)

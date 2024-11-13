@@ -14,6 +14,9 @@ To scape a node's data, just run:
 
 Each node will have their info scraped into the directory `data/vsn/`.
 
+_Note: This assumes your node ssh config is using the convention
+`ssh node-vsn`._
+
 ## Ideas
 
 This data will allow us to quickly perform queries such as:

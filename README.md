@@ -23,6 +23,6 @@ This data will allow us to quickly perform queries such as:
 - Find all XNV-8081Z cameras without a pinned hostname?
   (`grep -r XNV-8081Z data`)
 - Find all devices which need zone label set? (See example in
-  [print-todos.py](./print-todos.py))
+  [print-issues.py](./print-issues.py))
 - Find all C-Media microphones.
   (`find data -name lsusb.txt | xargs grep C-Media`)

@@ -55,3 +55,6 @@ data/W022/devices/000048b02d3b12f9.ws-nxagent
 data/W022/devices/000048b02d3b12f9.ws-nxagent/iio-names.txt
 data/W022/devices/000048b02d3b12f9.ws-nxagent/lsusb.txt
 ```
+
+It may be a good idea to invert this and just have the node collect all of this
+and create a `manifest.tar.gz` we can just rsync back.

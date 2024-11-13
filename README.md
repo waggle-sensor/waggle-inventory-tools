@@ -24,3 +24,5 @@ This data will allow us to quickly perform queries such as:
   (`grep -r XNV-8081Z data`)
 - Find all devices which need zone label set? (TODO but can use
   `kube-nodes.json` file)
+- Find all C-Media microphones.
+  (`find data -name lsusb.txt | xargs grep C-Media`)

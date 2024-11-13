@@ -2,7 +2,7 @@ from pathlib import Path
 import json
 
 # Example of finding all devices missing a zone.
-for path in Path("data").rglob("kube-nodes.json"):
+for path in Path("data").glob("kube-nodes.json"):
     vsn = path.parent.stem
     kube_nodes_data = json.loads(path.read_text())
     for item in kube_nodes_data["items"]:

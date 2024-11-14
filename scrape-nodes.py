@@ -59,8 +59,7 @@ for vsn in args.vsns:
     capture("cat /var/lib/misc/dnsmasq.leases", "dnsmasq-leases.txt")
     capture("cat /etc/hosts", "etc-hosts.txt")
     capture("kubectl get nodes -o json", "kube-nodes.json")
-    capture("nmcli conn", "nmcli-conn.txt")
-    capture("nmcli dev", "nmcli-dev.txt")
+    capture("nmcli conn show --active", "nmcli-conn.txt")
     capture_optional("mmcli -m 0", "mmcli-modem.txt")
     capture_optional("mmcli -i 0", "mmcli-sim.txt")
 

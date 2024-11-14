@@ -9,6 +9,12 @@ parser = argparse.ArgumentParser()
 parser.add_argument("vsns", nargs="*")
 args = parser.parse_args()
 
+# NOTE Most important point is to just capture the raw data for now and save it. We can do further
+# processing and indexing downstream. This not only keeps everything but also saves us from the
+# paralysis of choosing formats, fields, etc so we can just focus on the problem.
+
+# TODO Decide which items are really core config vs operations.
+
 for vsn in args.vsns:
     vsn = vsn.upper()
     host = f"node-{vsn}"
@@ -24,7 +30,12 @@ for vsn in args.vsns:
     def capture(cmd, name):
         data = check_output(cmd)
         save_file(name, data)
-        return data
+
+    def capture_optional(cmd, name):
+        try:
+            capture(cmd, name)
+        except subprocess.CalledProcessError:
+            print(f"WARNING: Optional command {cmd} failed on {vsn}")
 
     def capture_device(ip, cmd, name):
         if ip == "10.31.81.1":
@@ -32,22 +43,26 @@ for vsn in args.vsns:
         else:
             capture(f"ssh {ip} {shlex.quote(cmd)}", name)
 
-    # NOTE Most important point is to just capture the raw data for now and save it. We can do further
-    # processing and indexing downstream. This not only keeps everything but also saves us from the
-    # paralysis of choosing formats, fields, etc so we can just focus on the problem.
+    def capture_device_optional(ip, cmd, name):
+        try:
+            capture_device(ip, cmd, name)
+        except subprocess.CalledProcessError:
+            print(f"WARNING: Optional device command {cmd} failed on {vsn} {ip}")
 
-    # TODO Decide which items are really core config vs operations.
+    # Check if node is reachable.
+    check_output("true")  # Check if node is reachable.
 
     # Check VSN config to make sure matches cloud side VSN to node mapping.
     assert vsn == check_output("cat /etc/waggle/vsn").strip()
 
     # Scrape per node information.
-    # TODO Support optional steps...
-    capture("mmcli -m 0", "mmcli-modem.txt")
-    capture("mmcli -i 0", "mmcli-sim.txt")
     capture("cat /var/lib/misc/dnsmasq.leases", "dnsmasq-leases.txt")
     capture("cat /etc/hosts", "etc-hosts.txt")
     capture("kubectl get nodes -o json", "kube-nodes.json")
+    capture("nmcli conn", "nmcli-conn.txt")
+    capture("nmcli dev", "nmcli-dev.txt")
+    capture_optional("mmcli -m 0", "mmcli-modem.txt")
+    capture_optional("mmcli -i 0", "mmcli-sim.txt")
 
     # Scrape per device information.
     kube_nodes_data = json.loads(Path("data", vsn, "kube-nodes.json").read_text())
@@ -65,13 +80,9 @@ for vsn in args.vsns:
                 continue
 
         capture_device(ip, "lsusb", f"devices/{name}/lsusb.txt")
-        # TODO handle errors better
-        try:
-            capture_device(
-                ip, "cat /sys/bus/iio/devices/*/name", f"devices/{name}/iio-names.txt"
-            )
-        except subprocess.CalledProcessError:
-            pass
+        capture_device_optional(
+            ip, "cat /sys/bus/iio/devices/*/name", f"devices/{name}/iio-names.txt"
+        )
 
 # Using this data, we can then provide users a simple TODO list of things to do. Examples:
 # * Set zone on device

@@ -46,6 +46,7 @@ for vsn in args.vsns:
     capture("mmcli -m 0", "mmcli-modem.txt")
     capture("mmcli -i 0", "mmcli-sim.txt")
     capture("cat /var/lib/misc/dnsmasq.leases", "dnsmasq-leases.txt")
+    capture("cat /etc/hosts", "etc-hosts.txt")
     capture("kubectl get nodes -o json", "kube-nodes.json")
 
     # Scrape per device information.

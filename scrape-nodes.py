@@ -60,7 +60,6 @@ for vsn in args.vsns:
     capture("cat /etc/hosts", "etc-hosts.txt")
     capture("kubectl get nodes -o json", "kube-nodes.json")
     capture("nmcli conn show --active", "nmcli-conn.txt")
-    capture("nmcli dev", "nmcli-dev.txt")
     capture_optional("mmcli -m 0", "mmcli-modem.txt")
     capture_optional("mmcli -i 0", "mmcli-sim.txt")
 

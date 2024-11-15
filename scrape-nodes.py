@@ -79,6 +79,7 @@ for vsn in args.vsns:
                 continue
 
         capture_device(ip, "lsusb", f"devices/{name}/lsusb.txt")
+        capture_device(ip, "ls /dev/serial/by-id", f"devices/{name}/serial-by-id.txt")
         capture_device_optional(
             ip, "cat /sys/bus/iio/devices/*/name", f"devices/{name}/iio-names.txt"
         )
